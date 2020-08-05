@@ -16,7 +16,7 @@ const StreamEvents = (props) => {
         eventSource.close();
       }
       console.log("start events");
-      const es = new EventSource(`http://localhost:4001/stream`); // open stream
+      const es = new EventSource(`http://localhost:5000/stream`); // open stream
       es.onmessage = (e) => updateDisplay(JSON.parse(e.data)); // process events
       setEventSource(es); // store handle
       setToggle(true);
