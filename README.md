@@ -9,6 +9,11 @@ https://www.w3schools.com/html/html5_serversentevents.asp
 
 ### Getting started
 
+clone this repo
+
+    git clone https://github.com/debauchery1st/example-sse.git
+    cd example-sse
+
 install dependencies for both client and server:
 
     npm install
