@@ -1,4 +1,4 @@
-## example - HTML5 server side events
+## example - HTML5 server sent events
 
 https://www.w3schools.com/html/html5_serversentevents.asp
 
