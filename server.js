@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const server = express();
 // require middleware
 const port = process.env.PORT;
@@ -6,7 +7,7 @@ const port = process.env.PORT;
 server.use(express.json());
 
 // server.use middleware
-
+server.use(cors());
 // server side events
 server.use("/stream", require("./sseRouter"));
 
