@@ -27,7 +27,7 @@ router.get("/", (req, res) => {
 
 router.post("/post/:token", (req, res) => {
   const t = req.params.token;
-  console.log("post", t, req.body.data);
+  // console.log("post", t, req.body.data);
   if (!t) {
     res.status(200).send("no token!");
   } else {
@@ -44,6 +44,7 @@ router.post("/post/:token", (req, res) => {
 });
 
 function registerToken(token, value) {
+  // TODO
   // if (localCache.getToken(token)) {
   //   console.log("token already registered.");
   //   localCache.setToken(token, value);
@@ -63,9 +64,9 @@ router.get("/listen/:token", (req, res) => {
     const n = 1;
     res.set(sseHeaders); // set headers to stream
     setInterval(() => {
-      const msgs = localCache.getMessages();
-      const lastChecked = localCache.getToken(t);
-      const lastMessage = msgs[msgs.length - 1];
+      // const msgs = localCache.getMessages();
+      // const lastChecked = localCache.getToken(t);
+      // const lastMessage = msgs[msgs.length - 1];
       // if (lastMessage !== lastChecked) {
       //   localCache.setToken(t, lastMessage); // make them equal
       res.write(`data: ${JSON.stringify(getMessages())}\n\n`); // send to client.

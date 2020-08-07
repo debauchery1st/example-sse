@@ -7,7 +7,10 @@ const SendMessage = (props) => {
   const sendMessage = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:5000/stream/post/${token}`, { data: message })
+      .post(
+        `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/stream/post/${token}`,
+        { data: message }
+      )
       .then((res) => {
         if (res.data === "ok") {
           setMessage("");

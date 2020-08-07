@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const server = express();
 // require middleware
-const port = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 server.use(express.json());
 
@@ -21,6 +21,4 @@ server.get("/", (req, res) => {
   res.status(200).send("hello world");
 });
 
-server.listen(port || 5000, () =>
-  console.log(`server listening at ${port || 5000}`)
-);
+server.listen(PORT, () => console.log(`server listening at ${PORT}`));
