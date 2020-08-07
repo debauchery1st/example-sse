@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import SendMessage from "./SendMessage";
 import Message from "./Message";
 import { decodeString } from "./b64Utils";
+import Axios from "axios";
 
 const StreamEvents = (props) => {
   const [token, setToken] = useState("test");
@@ -38,7 +39,30 @@ const StreamEvents = (props) => {
       const es = new EventSource(
         `${process.env.REACT_APP_API}/stream/listen/${token}/${Date.now()}`
       ); // open stream
-      es.onmessage = (e) => updateDisplay(JSON.parse(e.data)); // process events
+      es.onmessage = (e) => {
+        // console.log(e);
+        if (e.data.length > 5) {
+          console.log("message received");
+          updateDisplay(JSON.parse(e.data)); // process events
+        } else {
+          switch (e.data) {
+            case "1":
+              console.log("heart-beat");
+              break;
+            case "2":
+              console.log("refresh");
+              ///update/:token/:timestamp
+              Axios.get(
+                `${
+                  process.env.REACT_APP_API
+                }/stream/update/${token}/${Date.now()}`
+              );
+              break;
+            default:
+              console.log("ping");
+          }
+        }
+      };
       setEventSource(es); // store handle
       setToggle(true);
     } else {
