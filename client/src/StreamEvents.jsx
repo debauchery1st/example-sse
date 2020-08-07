@@ -32,7 +32,7 @@ const StreamEvents = (props) => {
       }
       console.log("start events");
       const es = new EventSource(
-        `http://localhost:5000/stream/listen/${token}`
+        `${process.env.REACT_APP_API}/stream/listen/${token}`
       ); // open stream
       es.onmessage = (e) => updateDisplay(JSON.parse(e.data)); // process events
       setEventSource(es); // store handle
