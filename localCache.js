@@ -1,12 +1,6 @@
 const localCache = (function () {
   let instance;
   /**
-   * initialize the cache (internal)
-   */
-  // function createInstance({ limit, status, cache }) {
-  //   return new Object({ limit, status, cache });
-  // }
-  /**
    * start the cache.
    *
    * optionally,
@@ -35,10 +29,12 @@ const localCache = (function () {
    */
   function getMessages(n) {
     const i = startCache();
-    if (!n || i.cache.length < 5 || n > i.cache.length) {
+    if (!n || i.cache.length < 1 || n > i.cache.length) {
       return i.cache;
     }
-    return i.split(n || 5);
+    // console.log(i);
+    const idx = i.cache.length - 1;
+    return i.cache[idx];
   }
   /**
    * store msg in cache

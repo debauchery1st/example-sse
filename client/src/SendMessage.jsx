@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { encodeString } from "./b64Utils";
 import axios from "axios";
 const SendMessage = (props) => {
   const [message, setMessage] = useState("");
@@ -8,7 +9,7 @@ const SendMessage = (props) => {
     e.preventDefault();
     axios
       .post(`${process.env.REACT_APP_API}/stream/post/${token}`, {
-        data: message
+        data: encodeString(message)
       })
       .then((res) => {
         if (res.data === "ok") {

@@ -1,11 +1,13 @@
 const express = require("express");
-
 const localCache = require("./localCache");
+const { encodeString, decodeString } = require("./b64Utils");
+
 localCache.startCache(); // start the instance.
 localCache.setCacheLimit(20);
 localCache.pushMessage(
-  JSON.stringify({ date: Date.now(), message: "Welcome." })
+  encodeString(JSON.stringify({ date: Date.now(), message: "Welcome." }))
 );
+
 router = express.Router();
 
 sseHeaders = {
@@ -27,50 +29,59 @@ router.get("/", (req, res) => {
 
 router.post("/post/:token", (req, res) => {
   const t = req.params.token;
-  // console.log("post", t, req.body.data);
   if (!t) {
     res.status(200).send("no token!");
   } else {
-    // const msgTime = Date.now();
-    const m = JSON.stringify({
-      date: Date.now(),
-      message: req.body.data,
-      token: t
-    });
-    // const msg = `\n[${Date.now()}]  ${req.body.data}`;
-    localCache.pushMessage(m); // add the message to the local cache (globally shared)
+    // store as encoded object.
+    localCache.pushMessage(
+      encodeString(
+        JSON.stringify({
+          date: Date.now(),
+          message: decodeString(req.body.data),
+          token: t
+        })
+      )
+    );
     res.status(200).send("ok");
   }
 });
 
 function registerToken(token, value) {
   // TODO
-  // if (localCache.getToken(token)) {
-  //   console.log("token already registered.");
-  //   localCache.setToken(token, value);
-  //   return token;
-  // }
+  if (localCache.getToken(token)) {
+    const message = `${token} already registered.`;
+    const output = encodeString(JSON.stringify({ date: Date.now(), message }));
+    return `data: ${output}`; // personally message the client by not pushing it to the stack.
+    //  encodeString(JSON.stringify({ date: Date.now(), message: "Welcome." }))
+    //        res.write(`data: ${JSON.stringify(getMessages())}\n\n`);
+    // localCache.setToken(token, value);
+    // return token;
+  }
   localCache.setToken(token, value);
   return token;
 }
 
-router.get("/listen/:token", (req, res) => {
+router.get("/listen/:token/:timestamp", (req, res) => {
   const t = req.params.token;
+  const ts = req.params.timestamp;
   if (!t) {
     res.status(200).send("no token!");
   } else {
-    registerToken(t); // register the token
+    const token = registerToken(t, { ts, last: 0 }); // register the token
+    if (t !== token) {
+      res.write(token);
+      return;
+    }
     const seconds = 1000;
     const n = 1;
     res.set(sseHeaders); // set headers to stream
     setInterval(() => {
-      // const msgs = localCache.getMessages();
-      // const lastChecked = localCache.getToken(t);
-      // const lastMessage = msgs[msgs.length - 1];
-      // if (lastMessage !== lastChecked) {
-      //   localCache.setToken(t, lastMessage); // make them equal
-      res.write(`data: ${JSON.stringify(getMessages())}\n\n`); // send to client.
-      // }
+      const i = localCache.startCache();
+      const lastMessage = JSON.parse(decodeString(localCache.getMessages(1)));
+      if (lastMessage.date !== i.tokens[t].last) {
+        i.tokens[t].last = lastMessage.date;
+        res.write(`data: ${JSON.stringify(getMessages())}\n\n`);
+      }
     }, n * seconds); // cycle every n seconds until client closes the connection.
   }
 });

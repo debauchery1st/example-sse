@@ -1,17 +1,20 @@
 import React, { useState, useRef } from "react";
 import SendMessage from "./SendMessage";
 import Message from "./Message";
+import { decodeString } from "./b64Utils";
 const StreamEvents = (props) => {
   const [token, setToken] = useState("test");
   const [eventSource, setEventSource] = useState();
   const [toggle, setToggle] = useState(false);
   const [data, setData] = useState(["click connect!"]);
   const bottomRef = useRef();
+  const [ctr, setCtr] = useState(0);
   const updateDisplay = (msgs) => {
+    setCtr(ctr + 1);
     // const o = msgs.forEach((item) => JSON.parse(item.message));
     setData(
       msgs.map((strItem, index) => {
-        const { date, message, token } = JSON.parse(strItem);
+        const { date, message, token } = JSON.parse(decodeString(strItem));
         // console.log(strItem);
         return <Message key={index} u={token} ts={date} message={message} />;
       })
@@ -32,7 +35,7 @@ const StreamEvents = (props) => {
       }
       console.log("start events");
       const es = new EventSource(
-        `${process.env.REACT_APP_API}/stream/listen/${token}`
+        `${process.env.REACT_APP_API}/stream/listen/${token}/${Date.now()}`
       ); // open stream
       es.onmessage = (e) => updateDisplay(JSON.parse(e.data)); // process events
       setEventSource(es); // store handle
@@ -78,7 +81,7 @@ const StreamEvents = (props) => {
           <div ref={bottomRef} />
         </div>
       </div>
-      <SendMessage token={token} isConnected={toggle} />
+      <SendMessage token={token} isConnected={toggle && ctr > 0} />
     </div>
   );
 };
