@@ -11,15 +11,17 @@ const StreamEvents = (props) => {
   const [data, setData] = useState(["click connect!"]);
   const bottomRef = useRef();
   const [ctr, setCtr] = useState(0);
+
+  const renderMessage = ({ index, date, message, token }) => (
+    <Message key={index} u={token} ts={date} message={message} />
+  );
+
   const updateDisplay = (msgs) => {
     setCtr(ctr + 1);
-    // const o = msgs.forEach((item) => JSON.parse(item.message));
     setData(
-      msgs.map((strItem, index) => {
-        const { date, message, token } = JSON.parse(decodeString(strItem));
-        // console.log(strItem);
-        return <Message key={index} u={token} ts={date} message={message} />;
-      })
+      msgs.map((strItem, index) =>
+        renderMessage({ index, ...JSON.parse(decodeString(strItem)) })
+      )
     );
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -29,38 +31,37 @@ const StreamEvents = (props) => {
     setToken(e.target.value);
   };
 
+  const parseServerCode = (code) => {
+    switch (code) {
+      case "1":
+        console.log("heart-beat.");
+        break;
+      case "2":
+        console.log("acknowledge.");
+        Axios.get(
+          `${process.env.REACT_APP_API}/stream/update/${token}/${Date.now()}`
+        );
+        break;
+      default:
+        console.log("ping");
+    }
+  };
+
   const startStopEvents = (b) => {
     if (b) {
       if (eventSource) {
-        // if already open, close handle
-        eventSource.close();
+        eventSource.close(); // if already open, close handle
       }
       console.log("start events");
       const es = new EventSource(
         `${process.env.REACT_APP_API}/stream/listen/${token}/${Date.now()}`
       ); // open stream
       es.onmessage = (e) => {
-        // console.log(e);
         if (e.data.length > 5) {
           console.log("message received");
           updateDisplay(JSON.parse(e.data)); // process events
         } else {
-          switch (e.data) {
-            case "1":
-              console.log("heart-beat");
-              break;
-            case "2":
-              console.log("refresh");
-              ///update/:token/:timestamp
-              Axios.get(
-                `${
-                  process.env.REACT_APP_API
-                }/stream/update/${token}/${Date.now()}`
-              );
-              break;
-            default:
-              console.log("ping");
-          }
+          parseServerCode(e.data);
         }
       };
       setEventSource(es); // store handle
