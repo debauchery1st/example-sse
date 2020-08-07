@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import SendMessage from "./SendMessage";
 import Message from "./Message";
 import { decodeString } from "./b64Utils";
+
 const StreamEvents = (props) => {
   const [token, setToken] = useState("test");
   const [eventSource, setEventSource] = useState();
