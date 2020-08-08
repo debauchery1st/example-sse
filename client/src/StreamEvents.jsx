@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
-import SendMessage from "./SendMessage";
+import SendMessageForm from "./SendMessageForm";
 import Message from "./Message";
 import { decodeString } from "./b64Utils";
 import Axios from "axios";
 
 const StreamEvents = (props) => {
-  const [token, setToken] = useState("test");
+  const [token, setToken] = useState("");
   const [eventSource, setEventSource] = useState();
   const [toggle, setToggle] = useState(false);
-  const [data, setData] = useState(["click connect!"]);
+  const [data, setData] = useState(["enter a nickname & connect"]);
   const [ctr, setCtr] = useState(0);
   const bottomRef = useRef();
 
@@ -83,6 +83,7 @@ const StreamEvents = (props) => {
       <div className="chat-div-login">
         <input
           className="chat-input-name"
+          placeholder="nickname"
           value={token}
           onChange={updateToken}
           disabled={toggle}
@@ -90,6 +91,7 @@ const StreamEvents = (props) => {
         <button
           className={!toggle ? "chat-btn-connect" : "chat-btn-disconnect"}
           onClick={() => startStopEvents(!toggle)}
+          disabled={token.length < 3}
         >
           {!toggle ? "connect" : "disconnect"}
         </button>
@@ -100,7 +102,7 @@ const StreamEvents = (props) => {
           <div ref={bottomRef} />
         </div>
       </div>
-      <SendMessage token={token} isConnected={toggle && ctr > 0} />
+      <SendMessageForm token={token} isConnected={toggle && ctr > 0} />
     </div>
   );
 };

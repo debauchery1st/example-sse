@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { encodeString } from "./b64Utils";
 import axios from "axios";
-const SendMessage = (props) => {
+const SendMessageForm = (props) => {
   const [message, setMessage] = useState("");
   const connected = props.isConnected;
   const token = props.token;
@@ -21,6 +21,7 @@ const SendMessage = (props) => {
     e.preventDefault();
     setMessage(e.target.value);
   };
+  const invalidToken = token.length < 3;
   return (
     <form className="chat-form" onSubmit={sendMessage}>
       <input
@@ -29,11 +30,11 @@ const SendMessage = (props) => {
         value={message}
         onChange={handleUpdate}
       />
-      <button className="chat-form-btn" disabled={!connected}>
+      <button className="chat-form-btn" disabled={!connected || invalidToken}>
         send
       </button>
     </form>
   );
 };
 
-export default SendMessage;
+export default SendMessageForm;
