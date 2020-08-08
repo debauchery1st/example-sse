@@ -21,9 +21,9 @@ install dependencies for both client and server:
     yarn install
     cd ..
 
-run in parallel:
+run concurrently:
 
-    npm start
+    npm start develop
 
 #
 
