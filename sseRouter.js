@@ -85,9 +85,7 @@ router.get("/listen/:token/:timestamp", (req, res) => {
     }); // register the token
     if (t !== token) {
       // res.write(token);
-      res.write(
-        `data: nickname, ${token}, has already been registered. Please choose another.\n\n`
-      ); // write new message
+      res.write(`data: ${3}\n\n`); // write new message
       // console.log(token);
       return;
     }
@@ -112,6 +110,7 @@ router.get("/listen/:token/:timestamp", (req, res) => {
               clearInterval(i.tokens[t].interval);
               delete i.tokens[t];
             } else {
+              // acknowledge
               res.write(`data: ${2}\n\n`);
             }
           } else {

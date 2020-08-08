@@ -42,6 +42,9 @@ const StreamEvents = (props) => {
           `${process.env.REACT_APP_API}/stream/update/${token}/${Date.now()}`
         );
         break;
+      case "3":
+        console.log("imposter!");
+        break;
       default:
         console.log("??? unknown");
     }
