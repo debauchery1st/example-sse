@@ -47,11 +47,14 @@ router.post("/post/:token", (req, res) => {
 });
 
 function registerToken(token, value) {
-  // TODO
+  // TODO : fix response
   if (localCache.getToken(token)) {
     const message = `${token} already registered.`;
-    const output = encodeString(JSON.stringify({ date: Date.now(), message }));
-    return `data: ${output}`; // personally message the client by not pushing it to the stack.
+    const output = `data: ${encodeString(
+      JSON.stringify({ date: Date.now(), message })
+    )}`; // personally message the client by not pushing it to the stack.
+    console.log(output);
+    return output;
   }
   localCache.setToken(token, value);
   return token;
@@ -86,7 +89,7 @@ router.get("/listen/:token/:timestamp", (req, res) => {
     if (t !== token) {
       // res.write(token);
       res.write(`data: ${3}\n\n`); // write new message
-      // console.log(token);
+      console.log(`imposter? ${t}`);
       return;
     }
     res.set(sseHeaders); // set headers to stream
