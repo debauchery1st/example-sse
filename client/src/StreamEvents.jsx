@@ -9,8 +9,8 @@ const StreamEvents = (props) => {
   const [eventSource, setEventSource] = useState();
   const [toggle, setToggle] = useState(false);
   const [data, setData] = useState(["click connect!"]);
-  const bottomRef = useRef();
   const [ctr, setCtr] = useState(0);
+  const bottomRef = useRef();
 
   const renderMessage = ({ index, date, message, token }) => (
     <Message key={index} u={token} ts={date} message={message} />
@@ -28,7 +28,7 @@ const StreamEvents = (props) => {
 
   const updateToken = (e) => {
     e.preventDefault();
-    setToken(e.target.value);
+    setToken(e.target.value); // update value of token
   };
 
   const parseServerCode = (code) => {
@@ -43,7 +43,7 @@ const StreamEvents = (props) => {
         );
         break;
       default:
-        console.log("ping");
+        console.log("??? unknown");
     }
   };
 
@@ -52,13 +52,13 @@ const StreamEvents = (props) => {
       if (eventSource) {
         eventSource.close(); // if already open, close handle
       }
-      console.log("start events");
+      // console.log("start events");
       const es = new EventSource(
         `${process.env.REACT_APP_API}/stream/listen/${token}/${Date.now()}`
       ); // open stream
       es.onmessage = (e) => {
         if (e.data.length > 5) {
-          console.log("message received");
+          // console.log("message received");
           updateDisplay(JSON.parse(e.data)); // process events
         } else {
           parseServerCode(e.data);
@@ -67,41 +67,34 @@ const StreamEvents = (props) => {
       setEventSource(es); // store handle
       setToggle(true);
     } else {
-      console.log("stop events");
+      // console.log("stop events");
       if (eventSource) {
         eventSource.close(); // close stream
       }
       setEventSource(undefined); // remove handle
       setToggle(false);
+      setCtr(0);
     }
   };
 
   return (
-    <div {...props}>
-      <h2>HTML5 Server Sent Events</h2>
-      <input value={token} onChange={updateToken} />
-      <button
-        onClick={() => startStopEvents(!toggle)}
-        style={{
-          backgroundColor: toggle ? "grey" : "green",
-          color: "white",
-          padding: "1ch",
-          borderRadius: "5px"
-        }}
-      >
-        {!toggle ? "connect" : "disconnect"}
-      </button>
-      <div
-        style={{
-          height: "40ch",
-          width: "80ch",
-          overflowX: "hidden",
-          backgroundColor: "blue",
-          color: "white",
-          borderRadius: "10px",
-          padding: "5px"
-        }}
-      >
+    <div className="chat-div-window" {...props}>
+      <div className="chat-div-title">{props.title}</div>
+      <div className="chat-div-login">
+        <input
+          className="chat-input-name"
+          value={token}
+          onChange={updateToken}
+          disabled={toggle}
+        />
+        <button
+          className={!toggle ? "chat-btn-connect" : "chat-btn-disconnect"}
+          onClick={() => startStopEvents(!toggle)}
+        >
+          {!toggle ? "connect" : "disconnect"}
+        </button>
+      </div>
+      <div className="chat-div-messages">
         <div>
           {data}
           <div ref={bottomRef} />

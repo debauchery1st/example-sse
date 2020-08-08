@@ -22,19 +22,16 @@ const SendMessage = (props) => {
     setMessage(e.target.value);
   };
   return (
-    <form onSubmit={sendMessage}>
+    <form className="chat-form" onSubmit={sendMessage}>
       <input
+        className="chat-form-input"
         placeholder="send a message"
         value={message}
         onChange={handleUpdate}
-        style={{
-          minWidth: "10ch",
-          maxWidth: "75ch",
-          padding: "1ch",
-          margin: "1ch"
-        }}
       />
-      <button disabled={!connected}>send</button>
+      <button className="chat-form-btn" disabled={!connected}>
+        send
+      </button>
     </form>
   );
 };

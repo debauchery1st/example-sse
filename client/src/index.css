@@ -1,9 +1,13 @@
 html,
 body,
 #root {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
   margin: 0;
   height: 100%;
-  background: darkslategrey;
+  background: teal;
   color: whitesmoke;
 }
 /* body {
@@ -18,4 +22,56 @@ body,
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.chat-div-window {
+  display: flex;
+  flex-direction: column;
+  max-width: 90vw;
+}
+
+.chat-div-messages {
+  height: 60vh;
+  width: 73vw;
+  background-color: #121212;
+  color: #ffffff;
+  padding: 5px;
+}
+.chat-form {
+  display: flex;
+  flex-grow: inherit;
+  margin: 1ch 0;
+  width: 73vw;
+}
+.chat-form-input {
+  flex-grow: 1;
+  /* width: 60vw; */
+  padding: 1ch;
+  /* margin: 1ch 0; */
+}
+.chat-form-btn {
+  padding: 1ch;
+  margin-left: 1ch;
+}
+
+.chat-input-name {
+  width: 15vw;
+  padding: 1ch;
+}
+
+.chat-btn-connect {
+  width: 15vw;
+}
+.chat-btn-disconnect {
+  width: 15vw;
+}
+.chat-div-login {
+  display: flex;
+  justify-content: flex-end;
+  width: 73vw;
+  margin: 1ch;
+}
+
+.chat-div-title {
+  font-size: 1rem;
 }
