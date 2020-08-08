@@ -84,8 +84,11 @@ router.get("/listen/:token/:timestamp", (req, res) => {
       interval: undefined
     }); // register the token
     if (t !== token) {
-      res.write(token);
-      console.log(token);
+      // res.write(token);
+      res.write(
+        `data: nickname, ${token}, has already been registered. Please choose another.\n\n`
+      ); // write new message
+      // console.log(token);
       return;
     }
     res.set(sseHeaders); // set headers to stream
