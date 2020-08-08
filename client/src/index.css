@@ -31,6 +31,7 @@ code {
 }
 
 .chat-div-messages {
+  display: flex;
   height: 60vh;
   width: 73vw;
   background-color: #121212;
@@ -45,25 +46,26 @@ code {
 }
 .chat-form-input {
   flex-grow: 1;
-  /* width: 60vw; */
   padding: 1ch;
-  /* margin: 1ch 0; */
 }
 .chat-form-btn {
+  width: 12ch;
   padding: 1ch;
   margin-left: 1ch;
 }
 
 .chat-input-name {
-  width: 15vw;
+  width: 15ch;
   padding: 1ch;
 }
 
 .chat-btn-connect {
-  width: 15vw;
+  width: 12ch;
+  margin-left: 1ch;
 }
 .chat-btn-disconnect {
-  width: 15vw;
+  width: 12ch;
+  margin-left: 1ch;
 }
 .chat-div-login {
   display: flex;
@@ -74,4 +76,12 @@ code {
 
 .chat-div-title {
   font-size: 1rem;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
 }
