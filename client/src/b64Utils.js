@@ -19,19 +19,14 @@ function fromBinary(binary) {
 
 // atob & btoa require a browser.
 
-function encodeString(s) {
+export function encodeString(s) {
   // return btoa(toBinary(s));
   const b = new Buffer.from(toBinary(s));
   return b.toString("base64");
 }
 
-function decodeString(encoded) {
+export function decodeString(encoded) {
   // return fromBinary(atob(encoded));
   const b = new Buffer.from(encoded, "base64");
   return fromBinary(b.toString());
 }
-
-module.exports = {
-  encodeString,
-  decodeString
-};
