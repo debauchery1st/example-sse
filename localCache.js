@@ -11,7 +11,6 @@ const localCache = (function () {
    * @param {Array} cache initial value ["hello world"]
    */
   function startCache() {
-    // console.log(`limit ${limit}`);
     if (!instance) {
       // create the instance if it doesn't already exist.
       instance = new Object({
@@ -112,6 +111,9 @@ const localCache = (function () {
       case "list":
         console.log(instance.rooms);
         break;
+      case "info":
+        const myInfo = instance.tokens[token];
+        console.log(`name: ${token} room: ${myInfo.room}`);
       default:
         console.log("unknown: ", message);
     }
