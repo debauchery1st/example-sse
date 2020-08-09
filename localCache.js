@@ -51,7 +51,7 @@ const localCache = (function () {
     const i = startCache();
     const allRooms = i.rooms;
     const u = i.tokens[token];
-    const uRoom = u.room || "general";
+    const uRoom = u.room;
     return allRooms[uRoom].cache;
   }
 

@@ -91,7 +91,8 @@ router.get("/listen/:token/:timestamp", (req, res) => {
       ts,
       last: 0,
       pulse: 1,
-      interval: undefined
+      interval: undefined,
+      room: "general"
     }); // register the token
     if (t !== token) {
       // res.write(token);
