@@ -18,11 +18,37 @@ const localCache = (function () {
         cache: [],
         limit: 50,
         status: "OK",
-        tokens: {}
+        tokens: {},
+        rooms: {
+          general: {
+            topic: "Welcome to my experimental chat server.",
+            cache: []
+          }
+        }
       });
     }
     return instance;
   }
+
+  function createRoom({ roomName, topic }) {
+    if (roomName && !instance.rooms[roomName]) {
+      instance.rooms[roomName] = {
+        topic: topic || `Welcome to ${roomName}`,
+        cache: []
+      };
+      return true;
+    }
+    return false;
+  }
+
+  function joinRoom({ roomName, token }) {
+    if (instance.tokens[token] && instance.rooms[roomName]) {
+      instance.tokens[token]["room"] = roomName;
+      return true;
+    }
+    return false;
+  }
+
   /**
    * returns the last n number of messages.
    * @param {Number} n default is 5
@@ -72,6 +98,19 @@ const localCache = (function () {
   function setToken(token, value) {
     instance.tokens[token] = value;
   }
+  function processChatSlash({ message, t }) {
+    const token = t;
+    // message starts with a /
+    const [cmd, ...roomName] = message.slice(1).split(" ");
+    switch (cmd) {
+      case "join":
+        joinRoom({ roomName, token });
+      case "create":
+        createRoom({ roomName }) && joinRoom({ roomName, token });
+      case "list":
+        console.log(instance.rooms);
+    }
+  }
   return {
     startCache,
     getMessages,
@@ -79,7 +118,10 @@ const localCache = (function () {
     setCacheLimit,
     getCacheLimit,
     getToken,
-    setToken
+    setToken,
+    createRoom,
+    joinRoom,
+    processChatSlash
   };
 })();
 

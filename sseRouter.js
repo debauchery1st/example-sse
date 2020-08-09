@@ -32,16 +32,21 @@ router.post("/post/:token", (req, res) => {
   if (!t) {
     res.status(200).send("no token!");
   } else {
-    // store as encoded object.
-    localCache.pushMessage(
-      encodeString(
-        JSON.stringify({
-          date: Date.now(),
-          message: decodeString(req.body.data),
-          token: t
-        })
-      )
-    );
+    const message = decodeString(req.body.data);
+    if (message.startsWith("/")) {
+      localCache.processChatSlash({ message, t });
+    } else {
+      // store as encoded object.
+      localCache.pushMessage(
+        encodeString(
+          JSON.stringify({
+            date: Date.now(),
+            message,
+            token: t
+          })
+        )
+      );
+    }
     res.status(200).send("ok");
   }
 });
@@ -88,7 +93,8 @@ router.get("/listen/:token/:timestamp", (req, res) => {
     }); // register the token
     if (t !== token) {
       // res.write(token);
-      res.write(`data: ${3}\n\n`); // write new message
+      // res.write(`data: ${3}\n\n`); // write new message
+
       console.log(`imposter? ${t}`);
       return;
     }
