@@ -49,8 +49,10 @@ const localCache = (function () {
 
   function getCache({ token }) {
     const i = startCache();
-    const room = i.tokens[token].room || "general";
-    return i.rooms[room].cache;
+    const allRooms = i.rooms;
+    const u = i.tokens[token];
+    const uRoom = u.room || "general";
+    return allRooms[uRoom].cache;
   }
 
   /**
