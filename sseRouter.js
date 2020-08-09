@@ -64,7 +64,7 @@ function registerToken(token, value) {
     return output;
   }
   localCache.setToken(token, value);
-  localCache.tokens[token] = { room: "general" };
+  localCache.joinRoom({ roomName: "general", token });
   return token;
 }
 
