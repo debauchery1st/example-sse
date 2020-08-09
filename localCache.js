@@ -71,6 +71,7 @@ const localCache = (function () {
    * @param {String} msg
    */
   function pushMessage({ msg, token }) {
+    const i = startCache();
     const cache = getCache({ token });
     cache.push(msg);
     if (cache.length > i.limit) {
