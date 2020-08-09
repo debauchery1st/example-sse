@@ -49,11 +49,11 @@ const localCache = (function () {
 
   function getCache({ token }) {
     const i = startCache();
-    const allRooms = i.rooms;
-    const u = getToken(token);
-    console.log(i, u);
-    const uRoom = u.room;
-    return allRooms[uRoom].cache;
+    const room = i.tokens[token].room;
+    // const u = getToken(token);
+    // console.log(i, u);
+    // const uRoom = u.room;
+    return i.rooms[room].cache;
   }
 
   /**
