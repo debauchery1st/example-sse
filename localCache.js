@@ -14,7 +14,6 @@ const localCache = (function () {
     if (!instance) {
       // create the instance if it doesn't already exist.
       instance = new Object({
-        cache: [],
         limit: 50,
         status: "OK",
         tokens: {},
@@ -48,28 +47,34 @@ const localCache = (function () {
     return false;
   }
 
+  function getCache({ token }) {
+    const i = startCache();
+    const room = i.tokens[token]?.room || "general";
+    return i.rooms[room].cache;
+  }
+
   /**
    * returns the last n number of messages.
    * @param {Number} n default is 5
    */
-  function getMessages(n) {
-    const i = startCache();
-    if (!n || i.cache.length < 1 || n > i.cache.length) {
-      return i.cache;
+  function getMessages({ n, token }) {
+    const cache = getCache({ token });
+    if (!n || cache.length < 1 || n > cache.length) {
+      return cache;
     }
     // console.log(i);
-    const idx = i.cache.length - 1;
-    return i.cache[idx];
+    const idx = cache.length - 1;
+    return cache[idx];
   }
   /**
    * store msg in cache
    * @param {String} msg
    */
   function pushMessage(msg) {
-    const i = startCache();
-    i.cache.push(msg);
-    if (i.cache.length > i.limit) {
-      i.cache.shift();
+    const cache = getCache({ token });
+    cache.push(msg);
+    if (cache.length > i.limit) {
+      cache.shift();
     }
   }
   function setCacheLimit(n) {
@@ -86,7 +91,6 @@ const localCache = (function () {
    */
   function getToken(token) {
     const i = startCache();
-
     return i.tokens[token] || undefined;
   }
   /**
