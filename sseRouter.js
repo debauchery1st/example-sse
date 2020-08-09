@@ -64,6 +64,7 @@ function registerToken(token, value) {
     return output;
   }
   localCache.setToken(token, value);
+  localCache.tokens[token] = { room: "general" };
   return token;
 }
 
