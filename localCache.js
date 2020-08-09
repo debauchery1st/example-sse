@@ -48,14 +48,16 @@ const localCache = (function () {
   }
 
   function getCache({ token }) {
-    return startCache().rooms.general.cache;
-    // const profile = instance.tokens[token];
-    // console.log(profile);
-    // const room = "general";
-    // const u = getToken(token);
-    // console.log(i, u);
-    // const uRoom = u.room;
-    // return profile.room;
+    const general = startCache().rooms.general.cache;
+    const u = startCache().tokens[token];
+    let cache;
+    try {
+      cache = startCache().tokens[u.room].cache;
+      console.log("u.room,", u.room);
+    } catch {
+      cache = general;
+    }
+    return cache;
   }
 
   /**

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import SendMessageForm from "./SendMessageForm";
 import Message from "./Message";
+import LoginModal from "./LoginModal";
 import { decodeString } from "./b64Utils";
 import Axios from "axios";
 
@@ -11,6 +12,7 @@ const StreamEvents = (props) => {
   const [data, setData] = useState(["enter a nickname & connect"]);
   const [ctr, setCtr] = useState(0);
   const bottomRef = useRef();
+  const inputRef = useRef();
 
   const renderMessage = ({ index, date, message, token }) => (
     <Message key={index} u={token} ts={date} message={message} />
@@ -77,35 +79,56 @@ const StreamEvents = (props) => {
       setEventSource(undefined); // remove handle
       setToggle(false);
       setCtr(0);
+      setToken("");
+      setData(["enter a nickname & connect"]);
     }
+  };
+  const optimistic = (message) => {
+    /* 
+      anticipate our message being echoed back to us.
+      insert message into the data context where we.
+      believe it should be.
+      when we hear back from the server we will update.
+      this removes any delay and makes it seem more responsive.
+    */
+    setData([
+      ...data,
+      <Message key={data.length} u={token} ts={Date.now()} message={message} />
+    ]);
   };
 
   return (
     <div className="chat-div-window" {...props}>
-      <div className="chat-div-title">{props.title}</div>
-      <div className="chat-div-login">
-        <input
-          className="chat-input-name"
-          placeholder="nickname"
-          value={token}
-          onChange={updateToken}
-          disabled={toggle}
-        />
+      <span className="chat-span-title">
+        <h1 className="chat-div-title">{props.title}</h1>
         <button
-          className={!toggle ? "chat-btn-connect" : "chat-btn-disconnect"}
+          className="chat-btn-disconnect"
           onClick={() => startStopEvents(!toggle)}
           disabled={token.length < 3}
         >
           {!toggle ? "connect" : "disconnect"}
         </button>
-      </div>
+      </span>
+
+      <LoginModal
+        token={token}
+        updateToken={updateToken}
+        toggle={toggle}
+        startStopEvents={startStopEvents}
+        open={!(toggle && ctr > 0)}
+      />
       <div className="chat-div-messages">
         <div>
           {data}
           <div ref={bottomRef} />
         </div>
       </div>
-      <SendMessageForm token={token} isConnected={toggle && ctr > 0} />
+      <SendMessageForm
+        inputRef={inputRef}
+        token={token}
+        isConnected={toggle && ctr > 0}
+        optimistic={optimistic}
+      />
     </div>
   );
 };

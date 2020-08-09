@@ -36,7 +36,12 @@ code {
   width: 73vw;
   background-color: #121212;
   color: #ffffff;
-  padding: 5px;
+  padding: 1rem;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
 }
 .chat-form {
   display: flex;
@@ -55,31 +60,47 @@ code {
 }
 
 .chat-input-name {
-  width: 15ch;
+  width: 21ch;
   padding: 1ch;
+  border-radius: 5px;
 }
 
 .chat-btn-connect {
   width: 12ch;
   margin-left: 1ch;
+  border-radius: 5px;
 }
 .chat-btn-disconnect {
   width: 12ch;
   margin-left: 1ch;
+  border-radius: 5px;
 }
 .chat-div-login {
   display: flex;
   justify-content: flex-end;
-  width: 73vw;
-  margin: 1ch;
 }
-
 .chat-div-title {
   font-size: 1rem;
 }
-
+.chat-span-title {
+  display: flex;
+  justify-content: space-between;
+}
+.chat-p-message {
+  margin-right: 1ch;
+  margin-left: 0;
+  color: lightgrey;
+  font: "monospace";
+  letter-spacing: 1px;
+}
+.chat-span-message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 pre {
   overflow-x: auto;
+  overflow-y: auto;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
