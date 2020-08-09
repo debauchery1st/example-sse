@@ -105,10 +105,15 @@ const localCache = (function () {
     switch (cmd) {
       case "join":
         joinRoom({ roomName, token });
+        break;
       case "create":
         createRoom({ roomName }) && joinRoom({ roomName, token });
+        break;
       case "list":
         console.log(instance.rooms);
+        break;
+      default:
+        console.log("unknown: ", message);
     }
   }
   return {
