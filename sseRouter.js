@@ -4,9 +4,10 @@ const { encodeString, decodeString } = require("./b64Utils");
 
 localCache.startCache(); // start the instance.
 localCache.setCacheLimit(20);
-localCache.pushMessage(
-  encodeString(JSON.stringify({ date: Date.now(), message: "Welcome." }))
-);
+localCache.pushMessage({
+  msg: encodeString(JSON.stringify({ date: Date.now(), message: "Welcome." })),
+  token: "system"
+});
 
 router = express.Router();
 
@@ -37,15 +38,16 @@ router.post("/post/:token", (req, res) => {
       localCache.processChatSlash({ message, t });
     } else {
       // store as encoded object.
-      localCache.pushMessage(
-        encodeString(
+      localCache.pushMessage({
+        msg: encodeString(
           JSON.stringify({
             date: Date.now(),
             message,
             token: t
           })
-        )
-      );
+        ),
+        token: t
+      });
     }
     res.status(200).send("ok");
   }

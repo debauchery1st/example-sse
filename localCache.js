@@ -16,7 +16,7 @@ const localCache = (function () {
       instance = new Object({
         limit: 50,
         status: "OK",
-        tokens: {},
+        tokens: { system: { room: "general" } },
         rooms: {
           general: {
             topic: "Welcome to my experimental chat server.",
@@ -70,7 +70,7 @@ const localCache = (function () {
    * store msg in cache
    * @param {String} msg
    */
-  function pushMessage(msg) {
+  function pushMessage({ msg, token }) {
     const cache = getCache({ token });
     cache.push(msg);
     if (cache.length > i.limit) {
