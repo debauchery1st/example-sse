@@ -48,12 +48,12 @@ const localCache = (function () {
   }
 
   function getCache({ token }) {
-    const i = startCache();
-    const room = i.tokens[token].room;
+    const profile = startCache().tokens[token];
+    console.log(profile);
     // const u = getToken(token);
     // console.log(i, u);
     // const uRoom = u.room;
-    return i.rooms[room].cache;
+    // return profile.room;
   }
 
   /**
