@@ -50,7 +50,7 @@ const localCache = (function () {
   function getCache({ token }) {
     const profile = instance.tokens[token];
     console.log(profile);
-    const room = profile.room || "general";
+    const room = "general";
     return instance.rooms[room].cache;
     // const u = getToken(token);
     // console.log(i, u);
