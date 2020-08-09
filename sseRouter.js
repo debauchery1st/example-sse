@@ -109,10 +109,14 @@ router.get("/listen/:token/:timestamp", (req, res) => {
       i.tokens[t].pulse = (i.tokens[t].pulse + 1) % 20;
       const timeDelta = Date.now() - i.tokens[t].ts;
 
-      const lastMessage = JSON.parse(decodeString(localCache.getMessages(1)));
+      const lastMessage = JSON.parse(
+        decodeString(localCache.getMessages({ n: 1, token: t }))
+      );
       if (lastMessage.date !== i.tokens[t].last) {
         i.tokens[t].last = lastMessage.date;
-        res.write(`data: ${JSON.stringify(getMessages())}\n\n`); // write new message
+        res.write(
+          `data: ${JSON.stringify(getMessages({ n: 100, token: t }))}\n\n`
+        ); // write new message
       } else {
         if (i.tokens[t].pulse === 0) {
           // console.log(timeDelta);
